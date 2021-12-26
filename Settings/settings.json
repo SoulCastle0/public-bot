@@ -1,0 +1,85 @@
+{
+   "ClientSettings": {
+      "SERVER": "921722201051365426",
+      "TOKEN": "OTIxNzMyMzE1MTQ5OTAxODk0.Yb3MHA.PG6K6n6iYpMidaLEJqtYuTQ0P1Y",
+      "PREFIX": "!",
+      "BOT_VOICE_CHANNEL": "921730205310124073",
+      "DEVELOPERS": ["752469034997514305"]
+   },
+   "GuildSettings": {
+      "RegistryType": ["tagli", "tagsiz"],
+      "CreateLogChannels": [
+         "mute-log",
+         "uyari-log",
+         "jail-log",
+         "ban-log",
+         "komut-log",
+         "tag-log",
+         "rol-log",
+         "ses-log"
+      ]
+   },
+
+   "Channels": {
+      "LogChannels": {
+         "MUTE_LOG": "921730093242527756",
+         "TALENT_LOG": "921730425225895947",
+         "WARN_LOG": "922893951365705818",
+         "JAIL_LOG": "921730034639732807",
+         "BAN_LOG": "921729903924224061",
+         "TAG_LOG": "922893605310447627",
+         "COMMAND_LOG": "",
+         "VOICE_LOG": "921729845359173642"
+      }
+   },
+
+   "Roles":{
+      "StaffRoles": {
+         "Registry": {
+            "REGISTER": "921723837979193424"
+         },
+         "Penalty": {
+            "BAN_HAMMER": "921723965481811998",
+            "ROLE_MANAGER": "921725718596055054",
+            "JAIL_HAMMER": "921723889103564850",
+            "WARN_HAMMER": "921723838633488425",
+            "TRANSPORT": "921723844220289054",
+            "CHAT_MUTE_HAMMER": "921723966178066452",
+            "VOICE_MUTE_HAMMER": "921725244606148638"
+         },
+         "Additional": {
+            "SORUN_COZUCU": "921729277345529856"
+         },
+         "ManagerRoles": {
+            "CHAT_MANAGER": "922891726090272788",
+            "PUBLIC_MANAGER": "922891727130464316",
+            "REGISTER_MANAGER": "922891727281463316",
+            "TAG_MANAGER": "922891727692496926",
+            "INVITE_MANAGER": "922891730376867860",
+            "STREAMER_MANAGER": "922891729013719090"
+         }
+      },
+      "UserRoles": {
+         "BOY": ["921722738530471987", "921722789755490324"],
+         "GIRL": ["921722823364464640", "921722830880649277"],
+         "TAG_ROLE": "921725055430443029",
+         "Punishment": {
+            "CHAT_MUTED": "921725716125593600",
+            "VOICE_MUTED": "921725716343709708",
+            "JAIL": "921725717304188968",
+            "WARNED": "921728837363044402"
+         }
+      },
+      "TalentRoles": {
+         "VIP": "921728763593637919",
+         "STREAMER": "921728764042436628",
+         "MUSICIAN": "921728764818378832",
+         "ARTIST": "921728836129918976",
+         "VOICE_ACTOR": "922889793766035526",
+         "POETRIST": "922890641158070272",
+         "VOCAL": "922891022944587827",
+         "CODER": "922891422259118091",
+         "DESIGNER": "921728836759076864"
+      }
+   }
+}

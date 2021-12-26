@@ -1,0 +1,23 @@
+{
+  "name": "project-b",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "ascii-table": "^0.0.9",
+    "chalkercli": "^1.6.4",
+    "consola": "^2.15.3",
+    "discord.js": "^13.4.0",
+    "quick.db": "^7.1.3"
+  }
+}
