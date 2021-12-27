@@ -39,7 +39,12 @@
 
    "EmbedSettings": {
       "UnBackgroundColor": "#37383f",
-      "Footer": "ejs 💚  {guild}"
+      "Footer": "ejs 💚  {guild}",
+      "Colors": {
+         "BOY_COLOR": "#24C4FF",
+         "GIRL_COLOR": "#EA24FF",
+         "ERROR_COLOR": "#E50909"
+      }
    },
 
    "Roles":{
