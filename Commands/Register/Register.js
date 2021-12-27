@@ -48,27 +48,32 @@ module.exports = {
             Embed.setDescription(`[${Member}] adlı kullanıcıyı (\`\` ${Name} ${Age} \`\`) olarak kayıt etmek için lütfen bir cinsiyet seç.`)
             Embed.setColor(client.settings.EmbedSettings.UnBackgroundColor);
             Embed.setFooter(client.settings.EmbedSettings.Footer.replace(`{guild}`, message.guild.name));
-            var Message       = await message.channel.send({embeds: [Embed]})
-            var Collector     = await Message.createReactionCollector((user) => user.id == message.author.id, {max:1});
-            await Message.react("921735625160425503");
-            await Message.react("921735626242543636");
-            
+            var Collector     = await message.createReactionCollector({filter: Filter, max:1});
+            await message.react("921735625160425503");
+            await message.react("921735626242543636");
+            await message.react("921735630919196763");
+         
             Collector.on('collect', async (reaction, user) => {
                if (reaction.emoji.id == "921735625160425503"){
                   await Collector.stop();
                   await Embed.setDescription(`[${Member}] kullanıcısını başarıyla (\`\` ${Name} ${Age}\`\`) adlıyla **erkek** olarak kayıt ettin.`)
+                  message.channel.send({embeds: [Embed]})
                   Member.roles.set(client.settings.Roles.UserRoles.BOY);
                }
                else if (reaction.emoji.id == "921735626242543636") {
                   await Collector.stop();   
                   await Embed.setDescription(`[${Member}] kullanıcısını başarıyla (\`\` ${Name} ${Age}\`\`) adlıyla **kadın** olarak kayıt ettin.`)
-                  Message.edit({embeds: [Embed]})
+                  message.channel.send({embeds: [Embed]})
                   Member.roles.set(client.settings.Roles.UserRoles.GIRL);
-               };
+               }
+               else if (reaction.emoji.id == "921735630919196763"){
+                  Collector.stop();
+                  message.reactions.removeAll();
+               }
             }); // Collector collect
             Collector.on("end", async() => {
                await Collector.stop();
-               await Message.reactions.removeAll();
+               await message.reactions.removeAll();
                Embed.setDescription(`[${Member}] kişisi aramıza katıldı hadi ona **hoş geldin** diyelim!`);
                Embed.setFooter(client.settings.EmbedSettings.Footer.replace(`{guild}`, message.guild.name));
                Embed.setColor(client.settings.EmbedSettings.UnBackgroundColor);

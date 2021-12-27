@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "ascii-table": "^0.0.9",
+    "axios": "^0.24.0",
     "chalkercli": "^1.6.4",
     "consola": "^2.15.3",
     "discord.js": "^13.4.0",

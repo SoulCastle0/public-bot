@@ -10,6 +10,24 @@ module.exports.GetMessageURL = (client, message) => {
 }
 
 /**
+ * 
+ * {
+ * "inputPerson": {
+ *      "type":"NaturalInputPerson",
+ *      "personName": {
+ *                  "nameFields": [
+ *                                  {
+ *                      "string":"Peter van der Sar",
+ *                      "fieldType":"FULLNAME"
+ *                                 
+ *                                  }
+ *                                 ]
+ *           }
+ *      }
+ * 
+ */
+
+/**
  * Getting user avatarURL
  * @param {Discord.User} user 
  */
