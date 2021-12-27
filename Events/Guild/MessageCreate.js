@@ -88,7 +88,7 @@ module.exports = {
                 embed.setColor(client.settings.EmbedSettings.UnBackgroundColor);
                 embed.addField(`[KULLANICI]`, `${message.author} (\`\`${message.author.id}\`\`)`);
                 embed.addField(`[KOMUT]`, `\`\`\`diff\n- !${commandName}\`\`\`` , true);
-                embed.addField('[MESAJA GIT]', `[_Buraya tıklayıp mesaja git_](${GetMessageURL(client, message)})\n**Manuel**\n${GetMessageURL(client, message)}`, false);
+                embed.addField('[MESAJA GIT]', `[_Buraya tıklayıp mesaja git_](${client.functions.GetMessageURL(client, message)})\n**Manuel**\n${client.functions.GetMessageURL(client, message)}`, false);
                 embed.setThumbnail(client.functions.GetUserAvatar(message.author));
                 channel.send({embeds: [embed]});
             };

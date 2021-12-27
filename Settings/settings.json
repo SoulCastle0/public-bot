@@ -7,7 +7,7 @@
       "DEVELOPERS": ["752469034997514305"]
    },
    "GuildSettings": {
-      "isTaggedRegister": true,
+      "isTaggedRegister": false,
       "CreateLogChannels": [
          "mute-log",
          "uyari-log",
@@ -31,6 +31,9 @@
          "TAG_LOG": "922893605310447627",
          "COMMAND_LOG": "924722294977363968",
          "VOICE_LOG": "921729845359173642"
+      },
+      "PubliChannels": {
+         "GENERAL_CHAT": "925004876432412672"
       }
    },
 
@@ -68,6 +71,7 @@
       "UserRoles": {
          "BOY": ["921722738530471987", "921722789755490324"],
          "GIRL": ["921722823364464640", "921722830880649277"],
+         "UNREGISTER": "921725244073476097",
          "TAG_ROLE": "921725055430443029",
          "Punishment": {
             "CHAT_MUTED": "921725716125593600",
