@@ -4,7 +4,7 @@ const Client = require("../../Structures/Client");
 module.exports = {
    name: 'CreateLogChannels',
    description: 'show the ping of bot',
-   developerMode: false,
+   developerMode: true,
    permissions: "",
    aliases: ["create-logs", "log-create", "log-kur"],
    cooldown: 3,
@@ -18,48 +18,29 @@ module.exports = {
     */
    async run(message, args, commandName, client, Discord){
       // Declaring MessageEmbed;
-      const embed = new MessageEmbed();
-      const { MUTE_LOG, TALENT_LOG, WARN_LOG, JAIL_LOG, BAN_LOG, TAG_LOG, COMMAND_LOG, VOICE_LOG } = client.settings.Channels.LogChannels;
-      
-      /**
-       * 
-       * @param {Discord.ReactionEmoji} reaction 
-       * @param {Discord.User} user 
-       */
-      const filter = (reaction, user) => {
-        ["✅", "❌"].includes(reaction.name) && user.id == message.author.id;
-      }
-      embed.setDescription(`${message.author} !${commandName} adli komutu kullanmak istedigine emin misin?`)
-      const msg = await message.channel.send({embeds: [embed]}); 
-      msg.react("✅");
-      msg.react("❌");
+    const embed = new MessageEmbed();
+    var chid = {}
+    var logcate = await message.guild.channels.create('loglar', {
+            type: "GUILD_CATEGORY",
+            permissionOverwrites: [{
+                id: message.guild.id,
+                allow: ["ADMINISTRATOR"],
+                deny: ["VIEW_CHANNEL"]
+            }]
+        }).then((x) => {
+        chid.categoryid = x.id;
+    })
 
-      var collector = msg.createReactionCollector({filter: filter, max: 1, time: 15000});
-      collector.on("collect", (reaction, user) => {
-          if(reaction.emoji.name == "✅"){
-              collector.stop();
-              message.reply('kuruluyo');
-          }
-          else {
-              msg.reactions.removeAll();
-              collector.stop();
-              message.reply('Iptal edildi');
-          }
-      })
-
-      collector.on("end", (reaction) => {
-        collector.stop();  
-        msg.reactions.removeAll();    
-        message.reply('Basarili mesajlariniz siliniyor ve odalar kuruluyor...').then((x) => {
-            if(x.deletable){
-                setTimeout(() => {
-                    x.delete();
-                }, 5000);
-            }
-        })    
-      })
-
-
-
+    client.settings.GuildSettings.CreateLogChannels.forEach((c) => {
+        message.guild.channels.create(c, {
+            type: "GUILD_TEXT",     
+            parent: chid.categoryid,       
+            permissionOverwrites: [{
+                id: message.guild.id,
+                allow: ["ADMINISTRATOR"],
+                deny: "VIEW_CHANNEL"
+            }]
+        });
+    })
    }
 };

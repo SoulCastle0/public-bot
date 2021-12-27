@@ -7,7 +7,7 @@
       "DEVELOPERS": ["752469034997514305"]
    },
    "GuildSettings": {
-      "RegistryType": ["tagli", "tagsiz"],
+      "isTaggedRegister": true,
       "CreateLogChannels": [
          "mute-log",
          "uyari-log",
@@ -17,7 +17,8 @@
          "tag-log",
          "rol-log",
          "ses-log"
-      ]
+      ],
+      "TAG": "ϟ"
    },
 
    "Channels": {
@@ -28,9 +29,14 @@
          "JAIL_LOG": "921730034639732807",
          "BAN_LOG": "921729903924224061",
          "TAG_LOG": "922893605310447627",
-         "COMMAND_LOG": "",
+         "COMMAND_LOG": "924722294977363968",
          "VOICE_LOG": "921729845359173642"
       }
+   },
+
+   "EmbedSettings": {
+      "UnBackgroundColor": "#37383f",
+      "Footer": "ejs 💚  {guild}"
    },
 
    "Roles":{
