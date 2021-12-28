@@ -22,7 +22,7 @@ class Client extends Discord.Client {
         
         /** JSON Files */
         this.settings           = require('../Settings/settings.json');
-        this.errormsg         = require('../Settings/errorMessages.json')
+        this.errormsg           = require('../Settings/errorMessages.json')
         this.specialEmojis      = require('../Settings/emojis.json');
     }
     async init(token){
