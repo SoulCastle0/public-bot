@@ -1,0 +1,10 @@
+{
+   "Message": {
+      "NO_USER": "Kullanıcı belirtilmemiş",
+      "ALREADY_REGISTERED_OR_STAFF": "kullanıcı zaten [__kayıt__] ya da senden [__yüksek__] bir yetkiye sahip",
+      "NO_NAME_ARGS": "İsim boş bırakılamaz",
+      "NO_AGE_ARGS": "Yaş boş bırakılamaz",
+      "INVALID_AGE": "Geçersiz yaş",
+      "NO_NAMEDATA": "Veri bulunamadı"
+   }
+}

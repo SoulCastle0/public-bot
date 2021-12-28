@@ -49,6 +49,8 @@
 
    "Roles":{
       "StaffRoles": {
+         "MIN_STAFF": "921722923767701555",
+         "MAX_STAFF": "",
          "Registry": {
             "REGISTER": "921723837979193424"
          },
