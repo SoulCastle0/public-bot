@@ -96,5 +96,18 @@
          "CODER": "922891422259118091",
          "DESIGNER": "921728836759076864"
       }
+   },
+
+   "PointSettings": {
+      "Punishment": {
+         "JAIL": 8,
+         "VOICE_MUTED": 2,
+         "CHAT_MUTED": 4,
+         "WARNED": 5
+      },
+      "Registry": {
+         "BOY": 5,
+         "GIRL": 5
+      }
    }
 }

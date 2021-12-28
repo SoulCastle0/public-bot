@@ -19,6 +19,7 @@
     "chalkercli": "^1.6.4",
     "consola": "^2.15.3",
     "discord.js": "^13.4.0",
+    "moment": "^2.29.1",
     "quick.db": "^7.1.3"
   }
 }

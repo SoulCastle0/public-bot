@@ -9,9 +9,10 @@ class Client extends Discord.Client {
         this.commands           = new Discord.Collection();
         this.cooldowns          = new Discord.Collection();
         
-        /** Database */
+        /** Database & Utils*/
         this.db                 = quick;
         this.functions          = require('../Util/Functions');
+        this.moment             = require('moment');
         /** Utils */
         this.animation          = require('chalkercli');
         
