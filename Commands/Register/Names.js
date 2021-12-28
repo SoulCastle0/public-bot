@@ -2,6 +2,8 @@ const { MessageEmbed }       = require("discord.js");
 const Discord                = require('discord.js');
 const Client                 = require("../../Structures/Client");
 const quick                  = require('quick.db');
+const User_DB                = new quick.table('user');
+const Table                  = require('table');
 
 module.exports = {
    name: "Names",
@@ -20,13 +22,7 @@ module.exports = {
     */
    async run(message, args, commandName, client, Discord){      
         var Member       = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        var Names        = quick.fetch(`names.${Member.id}`);
-        var Embed        = new MessageEmbed();
-        Embed.setDescription(`${message.author} tarafından ${Member} kullanıcısının eski isimleri istendi.`);
-        Embed.setAuthor(message.author.username, client.functions.GetUserAvatar(message.author));
-        Embed.setColor(client.settings.EmbedSettings.UnBackgroundColor);
-        Embed.addField(`İsimler: `, `\`\`\`CSS\n${Names.map((data, index) => `#${index + 1} ${data.name} | ${data.age} [${client.moment(data.date).format("LLL")}]`).join("\n")}\`\`\``, true)
-        Embed.setFooter(client.settings.EmbedSettings.Footer.replace('{guild}', message.guild.name));
-        message.channel.send({embeds: [Embed]});
+        client.functions.GetNamesOfUser(client, Member, message.author, message);        
+        //message.channel.send({embeds: [client.functions.GetNamesOfUser(client, Member, message.author)]});
    }
 };
