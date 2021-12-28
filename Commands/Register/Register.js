@@ -7,7 +7,7 @@ module.exports = {
    description: "Kullanıcıyı kayıt etmenizi sağlar.",
    developerMode: false,
    permissions: "",
-   aliases: ["erkek", "kadin", "e", "k", "register", "auto-reg", "regauto", "autoreg"],
+   aliases: ["kayıt", "register", "auto-reg", "regauto", "autoreg", "otokayıt", "ok"],
    cooldown: 3,
    /**
     * Register command
@@ -18,6 +18,7 @@ module.exports = {
     * @param {Discord} Discord 
     */
    async run(message, args, commandName, client, Discord){
+    var BannedWords      = ["amcık","orospu","piç","sikerim","sikik", "amcik", "amına","pezevenk","yavşak","ananı","anandır","orospu","evladı","göt","pipi","sokuk","yarrak","oç","o ç","siktir","bacını","karını","amk","aq","sik","amq","anaskm","AMK","YARRAK","sıkerım"];
     var Embed            = new MessageEmbed();
     var Member           = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     var Name             = args[1];
@@ -46,7 +47,7 @@ module.exports = {
         });
         return;
     }
-    else if(!Member.manageable || Member.roles.highest.position >= message.guild.roles.cache.get(client.settings.Roles.StaffRoles.MIN_STAFF).position || !Member.roles.cache.has(client.settings.Roles.UserRoles.UNREGISTER)) {
+    else if(Member.roles.highest.position >= message.guild.roles.cache.get(client.settings.Roles.StaffRoles.MIN_STAFF).position || !Member.roles.cache.has(client.settings.Roles.UserRoles.UNREGISTER)) {
         Embed.setDescription(`${Member} Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.ALREADY_REGISTERED_OR_STAFF}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
@@ -59,6 +60,18 @@ module.exports = {
         return;
     }
     else if (!Name){
+        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_NAME_ARGS}\`\`]`)
+        Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
+        message.channel.send({embeds: [Embed]}).then((msg) => {
+            if(msg.deletable){
+                setTimeout(() => {
+                    msg.delete();
+                }, 5000);
+            }
+        });
+        return;
+    }
+    else if(BannedWords.some(Word => message.content.toLowerCase().split(" ").includes(Word))){
         Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_NAME_ARGS}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
@@ -108,11 +121,12 @@ module.exports = {
                 ${Member} (\`\`${args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1)} | ${Age}\`\`) adıyla \`\`erkek\`\` olarak kayıt edildi.
                 
                 **[NOT]** Bu sistem **geliştirme** aşamasındadır. Karşılaştığınız sorunları lütfen geliştiriclere bildiriniz.
-                **[KESINLIK]** (\`\`1\`\`) üzerinden -> (\`\`${x.data.probability}\`\`) 
+                **[KESINLIK]** (\`\`100%\`\`) üzerinden -> (\`\`${Math.floor(x.data.probability * 100)}%\`\`) 
                 `);
                 Embed.setFooter(client.settings.EmbedSettings.Footer.replace('{guild}', message.guild.name));
                 Embed.setColor(client.settings.EmbedSettings.Colors.BOY_COLOR);
-                Embed.setAuthor(Member.user.username, client.functions.GetUserAvatar(Member));
+                Embed.setAuthor(Member.user.username);
+                Embed.setThumbnail(client.functions.GetUserAvatar(Member));
                 
                 await client.functions.RegisterUser(client, Member, args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1), Age, x.data.gender, message.author);
                 message.channel.send({embeds: [Embed]});
@@ -121,18 +135,20 @@ module.exports = {
                 ${Member} (\`\`${args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1)} | ${Age}\`\`) adıyla \`\`kadın\`\` olarak kayıt edildi.
                 
                 [NOT] Bu sistem **geliştirme** aşamasındadır. Karşılaştığınız sorunları lütfen geliştiriclere bildiriniz.
-                **[KESINLIK]** (\`\`1\`\`) üzerinden -> (\`\`${x.data.probability}\`\`) 
+                **[KESINLIK]** (\`\`100%\`\`) üzerinden -> (\`\`${Math.floor(x.data.probability * 100)}%\`\`) 
                 `);
                 Embed.setFooter(client.settings.EmbedSettings.Footer.replace('{guild}', message.guild.name));
                 Embed.setColor(client.settings.EmbedSettings.Colors.GIRL_COLOR);
-                Embed.setAuthor(Member.user.username, client.functions.GetUserAvatar(Member));
+                Embed.setAuthor(Member.user.username);
+                Embed.setThumbnail(client.functions.GetUserAvatar(Member));
                 
                 await client.functions.RegisterUser(client, Member, args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1), Age, x.data.gender, message.author.id);
                 message.channel.send({embeds: [Embed]});
             } else {
                 Embed.setDescription(`${Member} kullanıcısını kayıt ederken bir hatayla ile karşılaşıldı. [\`\`Geçersiz isim\`\`]`);
                 Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
-                Embed.setAuthor(Member.user.username, client.functions.GetUserAvatar(Member));
+                Embed.setAuthor(Member.user.username);
+                Embed.setThumbnail(client.functions.GetUserAvatar(Member));
                 
                 message.channel.send({embeds: [Embed]});
             }

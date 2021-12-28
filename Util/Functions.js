@@ -3,6 +3,7 @@ const Discord           = require('discord.js');
 const quick             = require('quick.db');
 const User_DB           = new quick.table('user');
 const Staff_DB          = new quick.table('staff');
+const Penal_DB          = new quick.table('penal');
 const Table             = require('table');
 /**
  * Getting messageURL
@@ -18,7 +19,7 @@ module.exports.GetMessageURL = (client, message) => {
  * @param {Discord.User} user 
  */
 module.exports.GetUserAvatar = (user) => {
-    return user.avatarURL({dynamic: true, format: 'png'});
+    return user.avatarURL({dynamic: true});
 };
 
 /**
@@ -177,3 +178,90 @@ ${Table.table(Titles, {
         })}\`\`\``)]});
     }
 };
+
+/**
+ * Remove all roles from specify member
+ * @param {Client} client 
+ * @param {Discord.GuildMember} user 
+ */
+module.exports.SetUnregister = (client, user) => {
+    user.setNickname(`İsim | Yaş`)
+    return user.roles.set([client.settings.Roles.UserRoles.UNREGISTER]);
+}
+
+/**
+ * Add penal to user
+ * @param {Client} client 
+ * @param {Discord.Message} message
+ * @param {Number} penalid 
+ * @param {Number} member 
+ * @param {Discord.User} author 
+ * @param {String} type 
+ * @param {String} reason 
+ * @param {Number} time 
+ * @param {Number} throwntime 
+ * @param {Number} endtime 
+ * @param {String} datatype 
+ */
+module.exports.AddPenal = (client, message, penalid, member, author, type, reason, time, throwntime, endtime, datatype) => {
+    var Penal_ID    = penalid;
+    var Member      = member;
+    var Author      = author;
+    var Type        = type;
+    var Reason      = reason;
+    var Time        = time;
+    var ThrownTime  = throwntime;
+    var EndTime     = endtime;
+    var DataType    = datatype;
+    var Message     = message;
+    var Embed       = new Discord.MessageEmbed();
+    var Warn_Log    = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.WARN_LOG);
+    var Ban_Log     = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.BAN_LOG);
+    var Jail_Log    = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.JAIL_LOG);
+    var Mute_Log    = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.MUTE_LOG);
+
+    var PenalDATA   = {
+        ID           : Penal_ID,
+        Active       : true,
+        Member       : Member.id,
+        Author       : Author.id,
+        Type         : Type,
+        Reason       : Reason,
+        ThrownTime   : ThrownTime,
+        EndTime      : EndTime,
+        RemovedBy    : "İşlem yok",
+        Date         : Date.now() 
+    };
+    User_DB.set(`penal.${Penal_ID}`, PenalDATA);
+    User_DB.push(`member.${Member.id}.penals`, PenalDATA);
+
+    switch (DataType) {
+        case "warn":
+            User_DB.add(`member.${Member.id}.warnpoint`, client.settings.PointSettings.Punishment.WARNED);
+            Staff_DB.add(`points.${Author.id}.warns`, 1);
+            Embed.setDescription(`${Member} adlı kullanıcı uyarıldı.
+
+            [YETIKLI] ${Author} (\`\`${Author.id}\`\`)
+            [UYARILAN] ${Member} (\`\`${Member.id}\`\`)
+
+            [SEBEP] \`\`${Reason}\`\`
+            [TARIH] **${client.moment(Date.now()).format("LLL")}**
+            `)
+            Embed.setColor(client.settings.EmbedSettings.Colors.SUCCESS_COLOR);
+            Warn_Log.send({embeds: [Embed]});
+            Message.channel.send({embeds: [Embed]}).then((msg) => {
+                if(msg.deletable){
+                    setTimeout(() => {
+                        msg.delete();
+                    }, 7000);
+                }
+            })
+            break;
+    
+        default:
+            Embed.setDescription(`Geçerli bir ceza türü girmelisin.`)
+            Embed.setColor(client)
+            return Message.channel.send({embeds: [Embed]});
+    }
+    quick.add(`penalno.${client.settings.ClientSettings.SERVER}`, 1);
+}
