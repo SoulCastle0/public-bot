@@ -1,8 +1,8 @@
 const Discord           = require('discord.js');
 const intents           = new Discord.Intents(32767);
 const quick             = require('quick.db');
-const TimeAgo                = require('javascript-time-ago').default;
-const tr_TR                  = require('javascript-time-ago/locale/tr.json');
+const TimeAgo           = require('javascript-time-ago').default;
+const tr_TR             = require('javascript-time-ago/locale/tr.json');
 TimeAgo.addDefaultLocale(tr_TR);
 class Client extends Discord.Client {
     constructor(){
