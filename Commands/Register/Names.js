@@ -26,7 +26,7 @@ module.exports = {
         Embed.setAuthor(message.author.username, client.functions.GetUserAvatar(message.author));
         Embed.setColor(client.settings.EmbedSettings.UnBackgroundColor);
         Embed.addField(`İsimler: `, `\`\`\`CSS\n${Names.map((data, index) => `#${index + 1} ${data.name} | ${data.age} [${client.moment(data.date).format("LLL")}]`).join("\n")}\`\`\``, true)
-        Embed.setFooter(client.settings.EmbedSettings.Footer);
+        Embed.setFooter(client.settings.EmbedSettings.Footer.replace('{guild}', message.guild.name));
         message.channel.send({embeds: [Embed]});
    }
 };
