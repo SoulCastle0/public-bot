@@ -22,7 +22,19 @@ module.exports = {
     var Member           = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     var Name             = args[1];
     var Age              = args[2];
-    if(!Member) {
+    if(!message.member.roles.cache.get(client.settings.Roles.StaffRoles.Registry.REGISTER) && !client.settings.Roles.StaffRoles.LowStaffs.some(LowRole => message.member.roles.cache.has(LowRole)) && !client.settings.Roles.StaffRoles.HighStaffs.some(HighRole => message.member.roles.cache.has(HighRole)) && !message.member.permissions.has("ADMINISTRATOR")){
+        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NOT_ENOUGH_PERM}\`\`]`)
+        Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
+        message.channel.send({embeds: [Embed]}).then((msg) => {
+            if(msg.deletable){
+                setTimeout(() => {
+                    msg.delete();
+                }, 5000);
+            }
+        });
+        return;  
+    }
+    else if(!Member) {
         Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`Kullanıcı belirtilmedi\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
@@ -32,6 +44,7 @@ module.exports = {
                 }, 5000);
             }
         });
+        return;
     }
     else if(!Member.manageable || Member.roles.highest.position >= message.guild.roles.cache.get(client.settings.Roles.StaffRoles.MIN_STAFF).position || !Member.roles.cache.has(client.settings.Roles.UserRoles.UNREGISTER)) {
         Embed.setDescription(`${Member} Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.ALREADY_REGISTERED_OR_STAFF}\`\`]`)
@@ -43,6 +56,7 @@ module.exports = {
                 }, 5000);
             }
         });
+        return;
     }
     else if (!Name){
         Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_NAME_ARGS}\`\`]`)
@@ -54,6 +68,7 @@ module.exports = {
                 }, 5000);
             }
         });
+        return;
     }
     else if(!Age) {
         Embed.setDescription(`Kayıt işlemi başlarken bir hata oluştu. [\`\`${client.errormsg.Message.NO_AGE_ARGS}\`\`]`);
@@ -65,6 +80,7 @@ module.exports = {
                 }, 5000);
             }
         });
+        return;
     }
     else if(isNaN(Age) || Age > 50) {
         Embed.setDescription(`Kayıt işlemi başlarken bir hata oluştu. [\`\`${client.errormsg.Message.INVALID_AGE}\`\`]`);
@@ -76,6 +92,7 @@ module.exports = {
                 }, 5000);
             }
         });
+        return;
     } else {
 
         if(Name.includes("ş")) Name = Name.replace('ş', 's').replace('ü', 'u');

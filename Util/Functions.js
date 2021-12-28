@@ -86,8 +86,21 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
     var Embed        = new Discord.MessageEmbed();
     var Member       = user;
     var Author       = author;
+    var Message      = message;
     var Titles       = [["ID", "İsim", "Yaş", "Tarih", "Önce"]];
-    if(!Member){
+    if(!message.member.roles.cache.get(client.settings.Roles.StaffRoles.Registry.REGISTER) && !client.settings.Roles.StaffRoles.LowStaffs.some(LowRole => message.member.roles.cache.has(LowRole)) && !client.settings.Roles.StaffRoles.HighStaffs.some(HighRole => message.member.roles.cache.has(HighRole)) && !message.member.permissions.has("ADMINISTRATOR")){
+        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NOT_ENOUGH_PERM}\`\`]`)
+        Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
+        message.channel.send({embeds: [Embed]}).then((msg) => {
+            if(msg.deletable){
+                setTimeout(() => {
+                    msg.delete();
+                }, 5000);
+            }
+        });
+        return;  
+    }
+    else if(!Member){
         Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_USER}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
@@ -109,6 +122,7 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
                 }, 5000);
             }
         });
+        return;
     } else {
         var Names = User_DB.fetch(`names.${Member.id}`);
         Titles = Titles.concat(Names.map((val, index) => {
