@@ -49,18 +49,18 @@ module.exports.RegisterUser = async (client, user, name, age, gender, author) =>
     */
     try {
         if(Gender == "male"){
-            await Member.setNickname(`${Name} | ${Age}`);
+            await Member.setNickname(`${Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1)} | ${Age}`);
             await Member.roles.set(Client.settings.Roles.UserRoles.BOY);
-            await User_DB.push(`names.${Member.id}`, {name: Name, age: Age, date: Date.now()});
+            await User_DB.push(`names.${Member.id}`, {name: Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1), age: Age, gender: Gender,date: Date.now()});
             
             Staff_DB.add(`registers.${Author.id}.boy`, 1);
             Staff_DB.add(`registers.${Author.id}.total`, 1);
             Staff_DB.add(`points.${Author.id}.boyReg`, client.settings.PointSettings.Registry.BOY);
         };
         if(Gender == "female"){
-            await Member.setNickname(`${Name} | ${Age}`);
+            await Member.setNickname(`${Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1)} | ${Age}`);
             await Member.roles.set(Client.settings.Roles.UserRoles.GIRL);
-            await User_DB.push(`names.${Member.id}`, {name: Name, age: Age, date: Date.now()});
+            await User_DB.push(`names.${Member.id}`, {name: Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1), age: Age, gender:Gender ,date: Date.now()});
 
             Staff_DB.add(`registers.${Author.id}.girl`, 1);
             Staff_DB.add(`registers.${Author.id}.total`, 1);
@@ -86,8 +86,7 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
     var Embed        = new Discord.MessageEmbed();
     var Member       = user;
     var Author       = author;
-    var Message      = message;
-    var Titles       = [["ID", "İsim", "Yaş", "Tarih", "Önce"]];
+    var Titles       = [["ID", "İsim", "Yaş", "Tarih", "Cinsiyet","Önce"]];
     if(!message.member.roles.cache.get(client.settings.Roles.StaffRoles.Registry.REGISTER) && !client.settings.Roles.StaffRoles.LowStaffs.some(LowRole => message.member.roles.cache.has(LowRole)) && !client.settings.Roles.StaffRoles.HighStaffs.some(HighRole => message.member.roles.cache.has(HighRole)) && !message.member.permissions.has("ADMINISTRATOR")){
         Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NOT_ENOUGH_PERM}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
@@ -127,11 +126,13 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
         var Names = User_DB.fetch(`names.${Member.id}`);
         Titles = Titles.concat(Names.map((val, index) => {
             var GetAgo = client.Ago.format(val.date, 'mini');
+            var _gender = val.gender;
             return [ 
                 `#${index + 1}`,
                 `${val.name}`,
                 `${val.age}`,
-                `[${client.moment(val.date).format("LLL")}]`,
+                `[${client.moment(val.date).format("DD/MM/YYYY")}]`,
+                `${_gender}`,
                 `${GetAgo.replace('önce', '')}`
             ];
         }));// Concat
@@ -155,13 +156,17 @@ ${Table.table(Titles, {
                     paddingLeft: 1,
                 },
                 3: {
+                    alignment:"center",
                     paddingLeft: 1,
-                    alignment: "center"
                 },
                 4: {
                     paddingLeft: 1,
                 },
                 5: {
+                    paddingLeft: 1,
+                },
+                6: {
+                    alignment:"center",
                     paddingLeft: 1,
                     paddingRight: 1
                 },

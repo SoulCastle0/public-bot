@@ -45,7 +45,7 @@ module.exports = {
         });
         return;
     }
-    else if(!Member.manageable || Member.roles.highest.position >= message.guild.roles.cache.get(client.settings.Roles.StaffRoles.MIN_STAFF).position || !Member.roles.cache.has(client.settings.Roles.UserRoles.UNREGISTER)) {
+    else if(!Member.manageable || Member.roles.highest.position >= message.guild.roles.cache.get(client.settings.Roles.StaffRoles.MIN_STAFF).position) {
         Embed.setDescription(`${Member} İsim değiştirilirken bir hata oluştu. [\`\`${client.errormsg.Message.ALREADY_REGISTERED_OR_STAFF}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
@@ -95,13 +95,15 @@ module.exports = {
     }
     else {
         var UserDB = new client.db.table('user');
-        Embed.setDescription(`${Member} adlı kişinin adı değiştirildi. Yeni adı [${Name} ${Age}]`);
+        Embed.setDescription(`${Member} adlı kişinin adı değiştirildi. Yeni adı [${Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1)} ${Age}]`);
         Embed.setColor(client.settings.EmbedSettings.Colors.SUCCESS_COLOR);
         Embed.setFooter(client.settings.EmbedSettings.Footer.replace('{guild}', message.guild.name));
         message.channel.send({embeds: [Embed]});
-
-        await Member.setNickname(`${Name} | ${Age}`);
-        UserDB.push(`names.${Member.id}`, { name: Member, age: Age, date: Date.now()});
+        var Gender;
+        if(Member.roles.cache.get(client.settings.Roles.UserRoles.BOY[0])) Gender = "male";
+        else if(Member.roles.cache.get(client.settings.Roles.UserRoles.GIRL[0])) Gender = "female";
+        await Member.setNickname(`${Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1)} | ${Age}`);
+        UserDB.push(`names.${Member.id}`, { name: Name.charAt(0).toUpperCase() + Name.slice(1), age: Age, gender: Gender,date: Date.now()});
     } 
    }
 };

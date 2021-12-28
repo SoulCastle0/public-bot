@@ -98,13 +98,14 @@ module.exports = {
         if(Name.includes("ş")) Name = Name.replace('ş', 's').replace('ü', 'u');
         else if(Name.includes("ğ")) Name = Name.replace('ğ', 'g');
         else if(Name.includes("ü")) Name = Name.replace('ü', 'u');
+        else if(Name.includes("İ")) Name = Name.replace('İ', 'i');
         else if(Name.includes("ı")) Name = Name.replace('ı', 'i');
     
         var url = `https://api.genderize.io/?name=${Name}`
         axios.get(url, {"method": "GET"}).then(async (x) => {
             if(x.data.gender == "male"){
                 Embed.setDescription(`
-                ${Member} (\`\`${args[1]} | ${Age}\`\`) adıyla \`\`erkek\`\` olarak kayıt edildi.
+                ${Member} (\`\`${args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1)} | ${Age}\`\`) adıyla \`\`erkek\`\` olarak kayıt edildi.
                 
                 **[NOT]** Bu sistem **geliştirme** aşamasındadır. Karşılaştığınız sorunları lütfen geliştiriclere bildiriniz.
                 **[KESINLIK]** (\`\`1\`\`) üzerinden -> (\`\`${x.data.probability}\`\`) 
@@ -113,11 +114,11 @@ module.exports = {
                 Embed.setColor(client.settings.EmbedSettings.Colors.BOY_COLOR);
                 Embed.setAuthor(Member.user.username, client.functions.GetUserAvatar(Member));
                 
-                await client.functions.RegisterUser(client, Member, args[1], Age, x.data.gender, message.author);
+                await client.functions.RegisterUser(client, Member, args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1), Age, x.data.gender, message.author);
                 message.channel.send({embeds: [Embed]});
             } else if(x.data.gender == "female"){
                 Embed.setDescription(`
-                ${Member} (\`\`${args[1]} | ${Age}\`\`) adıyla \`\`kadın\`\` olarak kayıt edildi.
+                ${Member} (\`\`${args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1)} | ${Age}\`\`) adıyla \`\`kadın\`\` olarak kayıt edildi.
                 
                 [NOT] Bu sistem **geliştirme** aşamasındadır. Karşılaştığınız sorunları lütfen geliştiriclere bildiriniz.
                 **[KESINLIK]** (\`\`1\`\`) üzerinden -> (\`\`${x.data.probability}\`\`) 
@@ -126,10 +127,10 @@ module.exports = {
                 Embed.setColor(client.settings.EmbedSettings.Colors.GIRL_COLOR);
                 Embed.setAuthor(Member.user.username, client.functions.GetUserAvatar(Member));
                 
-                await client.functions.RegisterUser(client, Member, args[1], Age, x.data.gender, message.author.id);
+                await client.functions.RegisterUser(client, Member, args[1].charAt(0).toUpperCase().replace('i', 'İ') + args[1].slice(1), Age, x.data.gender, message.author.id);
                 message.channel.send({embeds: [Embed]});
             } else {
-                Embed.setDescription(`${Member} kullanıcısını kayıt ederken bir hatayla ile karşılaşıldı.`);
+                Embed.setDescription(`${Member} kullanıcısını kayıt ederken bir hatayla ile karşılaşıldı. [\`\`Geçersiz isim\`\`]`);
                 Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
                 Embed.setAuthor(Member.user.username, client.functions.GetUserAvatar(Member));
                 
