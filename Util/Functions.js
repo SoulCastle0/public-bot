@@ -51,7 +51,7 @@ module.exports.RegisterUser = async (client, user, name, age, gender, author) =>
         if(Gender == "male"){
             await Member.setNickname(`${Name} | ${Age}`);
             await Member.roles.set(Client.settings.Roles.UserRoles.BOY);
-            await User_DB.push(`names.${Member.id}`, {name: Name, age: Age, gender: Gender, date: Date.now()});
+            await User_DB.push(`names.${Member.id}`, {name: Name, age: Age, date: Date.now()});
             
             Staff_DB.add(`registers.${Author.id}.boy`, 1);
             Staff_DB.add(`registers.${Author.id}.total`, 1);
@@ -60,13 +60,13 @@ module.exports.RegisterUser = async (client, user, name, age, gender, author) =>
         if(Gender == "female"){
             await Member.setNickname(`${Name} | ${Age}`);
             await Member.roles.set(Client.settings.Roles.UserRoles.GIRL);
-            await User_DB.push(`names.${Member.id}`, {name: Name, age: Age, gender: Gender, date: Date.now()});
+            await User_DB.push(`names.${Member.id}`, {name: Name, age: Age, date: Date.now()});
 
             Staff_DB.add(`registers.${Author.id}.girl`, 1);
             Staff_DB.add(`registers.${Author.id}.total`, 1);
             Staff_DB.add(`registers.${Author.id}.girlReg`, client.settings.PointSettings.Registry.GIRL);
         };
-        if(Gender !== "female" || Gender !== "male"){
+        if(Gender !== "female" && Gender !== "male"){
             return;
         }
     }

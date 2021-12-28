@@ -35,7 +35,7 @@ module.exports = {
         return;  
     }
     else if(!Member) {
-        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`Kullanıcı belirtilmedi\`\`]`)
+        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_USER}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
             if(msg.deletable){
