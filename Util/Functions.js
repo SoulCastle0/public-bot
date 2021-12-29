@@ -1,10 +1,11 @@
 const Client            = require("../Structures/Client");
 const Discord           = require('discord.js');
 const quick             = require('quick.db');
+const Table             = require('table');
+const ms                = require('ms');
 const User_DB           = new quick.table('user');
 const Staff_DB          = new quick.table('staff');
 const Penal_DB          = new quick.table('penal');
-const Table             = require('table');
 /**
  * Getting messageURL
  * @param {Client} client 
@@ -191,17 +192,17 @@ module.exports.SetUnregister = (client, user) => {
 
 /**
  * Add penal to user
- * @param {Client} client 
- * @param {Discord.Message} message
- * @param {Number} penalid 
- * @param {Number} member 
- * @param {Discord.User} author 
- * @param {String} type 
- * @param {String} reason 
- * @param {Number} time 
- * @param {Number} throwntime 
- * @param {Number} endtime 
- * @param {String} datatype 
+ * @param {Client} client Discord.Client
+ * @param {Discord.Message} message Discord.Message
+ * @param {Number} penalid penalid
+ * @param {Discord.GuildMember} member Discord.GuildMember
+ * @param {Discord.User} author message.author
+ * @param {String} type type of penal
+ * @param {String} reason reason of penal
+ * @param {Number} time time of penal
+ * @param {Number} throwntime thrown of time
+ * @param {Number} endtime end of time
+ * @param {String} datatype type of data    
  */
 module.exports.AddPenal = (client, message, penalid, member, author, type, reason, time, throwntime, endtime, datatype) => {
     var Penal_ID    = penalid;
@@ -238,14 +239,16 @@ module.exports.AddPenal = (client, message, penalid, member, author, type, reaso
     switch (DataType) {
         case "warn":
             User_DB.add(`member.${Member.id}.warnpoint`, client.settings.PointSettings.Punishment.WARNED);
+            User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.WARNED);
+            Penal_DB.push(DataType, {id: Member.id, ID: Penal_ID, EndTime: Date.now() + ms(Time)})
             Staff_DB.add(`points.${Author.id}.warns`, 1);
-            Embed.setDescription(`${Member} adlı kullanıcı uyarıldı.
+            Embed.setDescription(`${Member} adlı kullanıcı **uyarıldı**.
 
-            [YETIKLI] ${Author} (\`\`${Author.id}\`\`)
-            [UYARILAN] ${Member} (\`\`${Member.id}\`\`)
+            **[YETIKLI]** ${Author} (\`\`${Author.id}\`\`)
+            **[UYARILAN]** ${Member} (\`\`${Member.id}\`\`)
 
-            [SEBEP] \`\`${Reason}\`\`
-            [TARIH] **${client.moment(Date.now()).format("LLL")}**
+            **[SEBEP]** ${Reason}
+            **[TARIH]** **${client.moment(Date.now()).format("LLL")}**
             `)
             Embed.setColor(client.settings.EmbedSettings.Colors.SUCCESS_COLOR);
             Warn_Log.send({embeds: [Embed]});
@@ -257,11 +260,36 @@ module.exports.AddPenal = (client, message, penalid, member, author, type, reaso
                 }
             })
             break;
-    
+        case "chatmute": 
+            User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.CHAT_MUTED);
+            User_DB.add(`member.${Member.id}.chatmute`, 1);
+            Penal_DB.push(`chatmute`, {id: Member.id, ID: Penal_ID, EndTime: Date.now() + ms(Time)})
+            Staff_DB.add(`points.${Author.id}.chatmutes`, 1)
+            break;
+        case "voicemute": 
+            User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.VOICE_MUTED);
+            User_DB.add(`member.${Member.id}.voicemute`, 1);
+            Penal_DB.push(`voicemute`, {id: Member.id, ID: Penal_ID, EndTime: Date.now() + ms(Time)})
+            Staff_DB.add(`points.${Author.id}.voicemutes`, 1)
+            break;
         default:
-            Embed.setDescription(`Geçerli bir ceza türü girmelisin.`)
-            Embed.setColor(client)
-            return Message.channel.send({embeds: [Embed]});
+           break;
     }
     quick.add(`penalno.${client.settings.ClientSettings.SERVER}`, 1);
 }
+
+/**
+ * Getting penal id
+ * @param {Client} client 
+ */
+module.exports.GetPenalID = (client) => {
+    return quick.get(`penalno.${client.settings.ClientSettings.SERVER}`);
+};
+module.exports.GetVoiceMute = () => {
+    return Penal_DB.get(`voicemute`) || [];
+}
+
+module.exports.GetChatMute = () => {
+    return Penal_DB.get(`chatmute`) || [];
+}
+

@@ -2,11 +2,11 @@ const { MessageEmbed } = require("discord.js");
 const Discord = require('discord.js');
 const Client = require("../../Structures/Client");
 module.exports = {
-   name: "Warn",
+   name: "mute",
    description: "Kullanıcıyı uyarmanızı sağlar.",
    developerMode: false,
    permissions: "",
-   aliases: ["warn", 'uyar', "uyarı"],
+   aliases: ["sustur", "uyarı"],
    cooldown: 3,
    /**
     * Warn command
@@ -17,9 +17,6 @@ module.exports = {
     * @param {Discord} Discord 
     */
    async run(message, args, commandName, client, Discord){    
-      var PenalID          = client.functions.GetPenalID(client) + 1;  
-      var Member           = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-      var Reason           = args.slice(1).join(" ");
-      client.functions.AddPenal(client, message, PenalID, Member, message.author, 'Uyarı', Reason, 'Yok', 'Yok', "Kaldırma işlem yapılamaz", "warn");
+        /// TODO
    }
 };
