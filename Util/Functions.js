@@ -39,16 +39,6 @@ module.exports.RegisterUser = async (client, user, name, age, gender, author) =>
     var Age             = age;
     var Author          = author;
     
-    /* Not need these data for now
-    var Datas = {
-        ID: Member.id,
-        name: Name,
-        age: Age,
-        gender: Gender,
-        author: Author.id,
-        date: Date.now()
-    };
-    */
     try {
         if(Gender == "male"){
             await Member.setNickname(`${Name.charAt(0).toUpperCase().replace('i', 'İ') + Name.slice(1)} | ${Age}`);
@@ -181,7 +171,7 @@ ${Table.table(Titles, {
 };
 
 /**
- * Remove all roles from specify member
+ * Remove all roles from specifyed member
  * @param {Client} client 
  * @param {Discord.GuildMember} user 
  */
@@ -190,13 +180,8 @@ module.exports.SetUnregister = (client, user) => {
     return user.roles.set([client.settings.Roles.UserRoles.UNREGISTER]);
 }
 
-/**
- * Getting penal id
- * @param {Client} client 
- */
-module.exports.GetPenalID = (client) => {
-    return quick.get(`penalno.${client.settings.ClientSettings.SERVER}`);
-};
+
+/* useless for now
 module.exports.GetVoiceMute = () => {
     return Penal_DB.get(`voicemute`) || [];
 }
@@ -204,8 +189,10 @@ module.exports.GetVoiceMute = () => {
 module.exports.GetChatMute = () => {
     return Penal_DB.get(`chatmute`) || [];
 }
+*/
+
 /**
- * Get Member warn point
+ * This function is returning all warn of specifyed member as length
  * @param {Discord.GuildMember} user 
  */
 module.exports.GetMemberWarns = (user) => {
@@ -213,7 +200,7 @@ module.exports.GetMemberWarns = (user) => {
     return User_DB.get(`member.${Member.id}.warns`) || 0;
 }
 /**
- * Sending embed
+ * Sending to specifyed channel
  * @param {Discord.Message} message Declaring Discord.Message
  * @param {Discord.Channel} channel Message channel which you want to send embed
  * @param {Object} options {EmbedDesc, Color, IsField, FieldTitle, FieldContent, IsInline}
@@ -257,13 +244,13 @@ module.exports.SendEmbed = (message, channel, options) => {
 /** Penal Functions */
 
 /**
- * Add warn to user
+ * Warning specifyed user
  * @param {Client} client Client
  * @param {Discord.Message} message Discord.Message
  * @param {Discord.GuildMember} user Discord.MemberMention
- * @param {String | String[]} reason Penal reason
+ * @param {String | String[]} reason Reason of the penal 
  * @param {Discord.Channel} channel The channel which you want to send log message
- * @param {Discord.User} author Message author
+ * @param {Discord.User} author The author which you want to add warn point to his data.
  */
 module.exports.AddWarn = (client, message, channel, user, reason, author) => {
     var Client       = client;
@@ -273,11 +260,14 @@ module.exports.AddWarn = (client, message, channel, user, reason, author) => {
     var Reason       = reason;
     var Author       = author;
     var _date        = Date.now();
-    
+    /** Pushing warn data to Penal database this value cannot be null or undefined*/
     Penal_DB.push(`member.${Member.id}.warn`, {member: Member.id, reason: Reason, date: _date, author: Author.id})
-
+    
+    /** Adding penalpoint and warns to Member database these values cannot be null or undefined */
     User_DB.add(`member.${Member.id}.warns`, 1); // add 1 warn to user
     User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.WARNED); // add specify warn point to user
+    
+    /** Adding warn point to author(staff) database this value cannot be null or undefined */
     Staff_DB.add(`points.${Author.id}.warns`, 1); // add 1 warn point to staff
     this.SendEmbed(Message, Channel, {
         EmbedDesc: `<@${Member.id}> adlı kullanıcı başarılı bir şekilde **${Reason}** sebebiyle **__[${client.moment(_date).format("LLL")}]__** tarihinde uyarı aldı.
