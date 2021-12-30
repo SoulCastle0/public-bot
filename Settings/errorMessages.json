@@ -12,6 +12,6 @@
       "SELF_USAGE": "Kendi üzerinde kullanılamaz",
       "NO_TIME_ARGS": "Süre boş bırakılamaz",
       "INVALID_TIME": "Geçersiz süre",
-      "USER_IS_BOT": "Bu komut botlar üstünde kullanılamaz"
+      "USER_IS_BOT": "Geçersiz kullanıcı(BOT)"
    }
 }
