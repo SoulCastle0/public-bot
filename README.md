@@ -37,7 +37,7 @@ $ npm install
 ## Quick Start
 
 ```shell
-$ yarn 
+$ yarn dev
 ```
 or
 ```shell
