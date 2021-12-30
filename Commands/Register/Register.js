@@ -24,8 +24,6 @@ module.exports = {
     var Member           = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     var Name             = args[1];
     var Age              = args[2];
-    var SpecialGirlNames = ["çağla", "çiğdem", "çimen", "çilem", "çiler"]
-    var SpecialBoyNames  = ["çağa", "çağan", "çağatay", "çağdaş", "çağhan", "çağıl", "çağlar", "çağlayan", "çağman", "çağrı"]
     var Filter           = (reaction, user) => user.id === message.author.id;
     if(!message.member.roles.cache.get(client.settings.Roles.StaffRoles.Registry.REGISTER) && !client.settings.Roles.StaffRoles.LowStaffs.some(LowRole => message.member.roles.cache.has(LowRole)) && !client.settings.Roles.StaffRoles.HighStaffs.some(HighRole => message.member.roles.cache.has(HighRole)) && !message.member.permissions.has("ADMINISTRATOR")){
         Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NOT_ENOUGH_PERM}\`\`]`)
