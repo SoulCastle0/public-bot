@@ -1,13 +1,13 @@
 {
-  "name": "project-b",
+  "name": "public-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A discord.js public bot",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["discord-bot","discord.js bot", "discordbot", "discord.js", "javascript", "discord"],
+  "author": "sjuhyeon",
   "license": "Apache-2.0",
   "devDependencies": {
     "dotenv": "^10.0.0",
