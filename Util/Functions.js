@@ -90,7 +90,7 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
     var Author       = author;
     var Titles       = [["ID", "İsim", "Yaş", "Tarih", "Cinsiyet","Önce"]];
     if(!message.member.roles.cache.get(client.settings.Roles.StaffRoles.Registry.REGISTER) && !client.settings.Roles.StaffRoles.LowStaffs.some(LowRole => message.member.roles.cache.has(LowRole)) && !client.settings.Roles.StaffRoles.HighStaffs.some(HighRole => message.member.roles.cache.has(HighRole)) && !message.member.permissions.has("ADMINISTRATOR")){
-        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NOT_ENOUGH_PERM}\`\`]`)
+        Embed.setDescription(`İsimler listelenirken bir hata oluştu. [\`\`${client.errormsg.Message.NOT_ENOUGH_PERM}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
             if(msg.deletable){
@@ -102,7 +102,7 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
         return;  
     }
     else if(!Member){
-        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_USER}\`\`]`)
+        Embed.setDescription(`İsimler listelenirken bir hata oluştu. [\`\`${client.errormsg.Message.NO_USER}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
             if(msg.deletable){
@@ -114,7 +114,7 @@ module.exports.GetNamesOfUser = async (client, user, author, message) => {
         return;
     }
     else if(!User_DB.fetch(`names.${Member.id}`)){
-        Embed.setDescription(`Kayıt oluşturulurken bir hata oluştu. [\`\`${client.errormsg.Message.NO_NAMEDATA}\`\`]`)
+        Embed.setDescription(`İsimler listelenirken bir hata oluştu. [\`\`${client.errormsg.Message.NO_NAMEDATA}\`\`]`)
         Embed.setColor(client.settings.EmbedSettings.Colors.ERROR_COLOR);
         message.channel.send({embeds: [Embed]}).then((msg) => {
             if(msg.deletable){
@@ -217,9 +217,6 @@ module.exports.AddPenal = (client, message, penalid, member, author, type, reaso
     var Message     = message;
     var Embed       = new Discord.MessageEmbed();
     var Warn_Log    = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.WARN_LOG);
-    var Ban_Log     = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.BAN_LOG);
-    var Jail_Log    = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.JAIL_LOG);
-    var Mute_Log    = client.guilds.cache.get(client.settings.ClientSettings.SERVER).channels.cache.get(client.settings.Channels.LogChannels.MUTE_LOG);
 
     var PenalDATA   = {
         ID           : Penal_ID,
@@ -236,11 +233,8 @@ module.exports.AddPenal = (client, message, penalid, member, author, type, reaso
     User_DB.set(`penal.${Penal_ID}`, PenalDATA);
     User_DB.push(`member.${Member.id}.penals`, PenalDATA);
 
-    switch (DataType) {
-        case "warn":
             User_DB.add(`member.${Member.id}.warnpoint`, client.settings.PointSettings.Punishment.WARNED);
             User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.WARNED);
-            Penal_DB.push(DataType, {id: Member.id, ID: Penal_ID, EndTime: Date.now() + ms(Time)})
             Staff_DB.add(`points.${Author.id}.warns`, 1);
             Embed.setDescription(`${Member} adlı kullanıcı **uyarıldı**.
 
@@ -259,22 +253,6 @@ module.exports.AddPenal = (client, message, penalid, member, author, type, reaso
                     }, 7000);
                 }
             })
-            break;
-        case "chatmute": 
-            User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.CHAT_MUTED);
-            User_DB.add(`member.${Member.id}.chatmute`, 1);
-            Penal_DB.push(`chatmute`, {id: Member.id, ID: Penal_ID, EndTime: Date.now() + ms(Time)})
-            Staff_DB.add(`points.${Author.id}.chatmutes`, 1)
-            break;
-        case "voicemute": 
-            User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.VOICE_MUTED);
-            User_DB.add(`member.${Member.id}.voicemute`, 1);
-            Penal_DB.push(`voicemute`, {id: Member.id, ID: Penal_ID, EndTime: Date.now() + ms(Time)})
-            Staff_DB.add(`points.${Author.id}.voicemutes`, 1)
-            break;
-        default:
-           break;
-    }
     quick.add(`penalno.${client.settings.ClientSettings.SERVER}`, 1);
 }
 
@@ -292,4 +270,86 @@ module.exports.GetVoiceMute = () => {
 module.exports.GetChatMute = () => {
     return Penal_DB.get(`chatmute`) || [];
 }
+/**
+ * Get Member warn point
+ * @param {Discord.GuildMember} user 
+ */
+module.exports.GetMemberWarns = (user) => {
+    var Member = user;
+    return User_DB.get(`member.${Member.id}.warns`) || 0;
+}
+/**
+ * Sending embed
+ * @param {Discord.Message} message Declaring Discord.Message
+ * @param {Discord.Channel} channel Message channel which you want to send embed
+ * @param {Object} options {EmbedDesc, Color, IsField, FieldTitle, FieldContent, IsInline}
+ */
+module.exports.SendEmbed = (message, channel, options) => {
+    var client               = new Client();
+    var Message              = message;
+    var Channel              = channel;
+    var EmbedDescription     = options.EmbedDesc;
+    var EmbedColor           = options.Color;
+    var isField              = options.IsField;
+    var FieldTitle           = options.FieldTitle;
+    var FieldContent         = options.FieldContent;
+    var FieldInline          = options.IsInline;
+    var Thumbnail            = options.EmbedThumbnail
+    var Embed                = new Discord.MessageEmbed().setColor(EmbedColor);
+    
+    typeof FieldInline !== "undefined" ? FieldInline : false;
+    typeof Thumbnail !== "undefined" ? Thumbnail : "https://via.placeholder.com/150";
+    if(isField == true) {
+        if(options.IsInline == true){
+            Embed.setDescription(`${EmbedDescription}`);
+            Embed.addField(FieldTitle, FieldContent, FieldInline);
+            Embed.setThumbnail(Thumbnail);
+            Message.guild.channels.cache.get(Channel.id).send({embeds: [Embed]});
+        }
+        else {
+            Embed.setDescription(`${EmbedDescription}`);
+            Embed.addField(FieldTitle, FieldContent, FieldInline);
+            Embed.setThumbnail(Thumbnail);
+            Message.guild.channels.cache.get(Channel.id).send({embeds: [Embed]});
+        }
+    }
+    else {
+        Embed.setDescription(EmbedDescription);
+        Embed.setThumbnail(Thumbnail);
+        Message.guild.channels.cache.get(Channel.id).send({embeds: [Embed]});
+    }
+}
 
+/** Penal Functions */
+
+/**
+ * Add warn to user
+ * @param {Client} client Client
+ * @param {Discord.Message} message Discord.Message
+ * @param {Discord.GuildMember} user Discord.MemberMention
+ * @param {String | String[]} reason Penal reason
+ * @param {Discord.Channel} channel The channel which you want to send log message
+ * @param {Discord.User} author Message author
+ */
+module.exports.AddWarn = (client, message, channel, user, reason, author) => {
+    var Client       = client;
+    var Message      = message;
+    var Member       = user;
+    var Channel      = channel;
+    var Reason       = reason;
+    var Author       = author;
+    var _date        = Date.now();
+    
+    Penal_DB.push(`member.${Member.id}.warn`, {member: Member.id, reason: Reason, date: _date, author: Author.id})
+
+    User_DB.add(`member.${Member.id}.warns`, 1); // add 1 warn to user
+    User_DB.add(`member.${Member.id}.penalpoints`, client.settings.PointSettings.Punishment.WARNED); // add specify warn point to user
+    Staff_DB.add(`points.${Author.id}.warns`, 1); // add 1 warn point to staff
+    this.SendEmbed(Message, Channel, {
+        EmbedDesc: `<@${Member.id}> adlı kullanıcı başarılı bir şekilde **${Reason}** sebebiyle **__[${client.moment(_date).format("LLL")}]__** tarihinde uyarı aldı.
+        
+        [TOPLAM UYARI] **${User_DB.fetch(`member.${Member.id}.warns`)}**`, 
+        Color: Client.settings.EmbedSettings.Colors.SUCCESS_COLOR,
+        EmbedThumbnail: Member.user.avatarURL({dynamic: true})
+    })
+}
