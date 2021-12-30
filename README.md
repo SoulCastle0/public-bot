@@ -12,7 +12,5 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<p align="center">
-  <img alt="gif" align="center" src="./assets/gif.gif" width="500" height="auto" alt="gif" /></a>
-</p>
+![gif.gif](./assets/gif.gif) 
 
