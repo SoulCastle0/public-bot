@@ -20,6 +20,6 @@ module.exports = {
     */
    async run(message, args, commandName, client, Discord){      
         var Member       = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        client.functions.GetNamesOfUser(client, Member, message.author, message);        
+        await client.functions.GetNamesOfUser(client, Member, message.author, message);        
    }
 };

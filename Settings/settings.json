@@ -44,7 +44,8 @@
          "BOY_COLOR": "#24C4FF",
          "GIRL_COLOR": "#EA24FF",
          "ERROR_COLOR": "#E50909",
-         "SUCCESS_COLOR": "#0bf27b"
+         "SUCCESS_COLOR": "#0bf27b",
+         "WAITING_COLOR": "#FAF205"
       }
    },
 

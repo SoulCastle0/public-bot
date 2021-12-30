@@ -7,6 +7,11 @@
       "INVALID_AGE": "Geçersiz yaş",
       "INVALID_NAME": "Geçersiz isim",
       "NO_NAMEDATA": "Veri bulunamadı",
-      "NOT_ENOUGH_PERM": "Yetersiz yetki"
+      "NOT_ENOUGH_PERM": "Yetersiz yetki",
+      "NO_REASON_ARGS": "Sebep boş bırakılamaz",
+      "SELF_USAGE": "Kendi üzerinde kullanılamaz",
+      "NO_TIME_ARGS": "Süre boş bırakılamaz",
+      "INVALID_TIME": "Geçersiz süre",
+      "USER_IS_BOT": "Bu komut botlar üstünde kullanılamaz"
    }
 }
