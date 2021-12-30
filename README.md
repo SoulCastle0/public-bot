@@ -7,4 +7,6 @@
 </p>
 </p>
 
-![kink_v1.gif](./assets/gif.gif)
+<p align="center">
+  ![gif.gif](./assets/gif.gif)
+</p>
